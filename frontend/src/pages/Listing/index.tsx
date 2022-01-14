@@ -7,9 +7,9 @@ import { BASE_URL } from "utils/requests";
 
 function Listing() {
 
-    const [pgNumber, setPgNumber] = useState(0);
+    const [pageNumber, setPageNumber] = useState(0);
 
-    const [pg, setPg] = useState<MoviePage>({
+    const [page, setPage] = useState<MoviePage>({
         content: [],
         last: true,
         totalPages: 0,
@@ -22,20 +22,24 @@ function Listing() {
     });
 
     useEffect(() => {
-        axios.get(`${BASE_URL}/movies?size=12&page=${pgNumber}`)
+        axios.get(`${BASE_URL}/movies?size=12&page=${pageNumber}`)
             .then(result => {
                 const data = result.data as MoviePage;
-                setPg(data);
+                setPage(data);
             });
-    }, [pgNumber]);
+    }, [pageNumber]);
+
+    const handlePageChange = (newPageNumber : number) => {
+        setPageNumber(newPageNumber);
+    }
 
     return (
         <>
-            <Pagination />
+            <Pagination page={page} onChange={handlePageChange} />
 
             <div className="container">
                 <div className="row">
-                    {pg.content.map(movie => (
+                    {page.content.map(movie => (
                         <div key={movie.id} className="col-sm-6 col-lg-4 col-xl-3 mb-3">
                             <MovieCard movie={movie} />
                         </div>
