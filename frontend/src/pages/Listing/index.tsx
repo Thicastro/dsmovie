@@ -9,14 +9,25 @@ function Listing() {
 
     const [pgNumber, setPgNumber] = useState(0);
 
+    const [pg, setPg] = useState<MoviePage>({
+        content: [],
+        last: true,
+        totalPages: 0,
+        totalElements: 0,
+        size: 12,
+        number: 0,
+        first: true,
+        numberOfElements: 0,
+        empty: true
+    });
+
     useEffect(() => {
-        axios.get(`${BASE_URL}/movies?size=12&page=0`)
+        axios.get(`${BASE_URL}/movies?size=12&page=${pgNumber}`)
             .then(result => {
                 const data = result.data as MoviePage;
-                setPgNumber(data.number);
+                setPg(data);
             });
-    }, []);
-
+    }, [pgNumber]);
 
     return (
         <>
@@ -24,21 +35,12 @@ function Listing() {
 
             <div className="container">
                 <div className="row">
-                    <div className="col-sm-6 col-lg-4 col-xl-3 mb-3">
-                        <MovieCard />
-                    </div>
-                    <div className="col-sm-6 col-lg-4 col-xl-3 mb-3">
-                        <MovieCard />
-                    </div>
-                    <div className="col-sm-6 col-lg-4 col-xl-3 mb-3">
-                        <MovieCard />
-                    </div>
-                    <div className="col-sm-6 col-lg-4 col-xl-3 mb-3">
-                        <MovieCard />
-                    </div>
-                    <div className="col-sm-6 col-lg-4 col-xl-3 mb-3">
-                        <MovieCard />
-                    </div>
+                    {pg.content.map(movie => (
+                        <div key={movie.id} className="col-sm-6 col-lg-4 col-xl-3 mb-3">
+                            <MovieCard movie={movie} />
+                        </div>
+                        )
+                        )}
                 </div>
             </div>
         </>
