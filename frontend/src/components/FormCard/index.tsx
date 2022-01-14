@@ -46,8 +46,8 @@ function FormCard({ movieId }: Props) {
         }
 
         axios(config).then(result => {
-
-        })
+            navigate("/");
+        });
     }
 
     return (
